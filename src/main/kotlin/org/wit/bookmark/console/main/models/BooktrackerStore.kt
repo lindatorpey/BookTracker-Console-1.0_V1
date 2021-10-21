@@ -1,8 +1,8 @@
-package org.wit.bookmark.console.main.models
+import org.wit.bookmark.console.main.models.BooktrackerModel
 
 interface BooktrackerStore {
     fun findAll(): List<BooktrackerModel>
-    fun findOne(id: Long) : BooktrackerModel?
-    fun create(book: BooktrackerModel)
-    fun update(book: BooktrackerModel)
+    fun findOne(id: Long): BooktrackerModel?
+    fun create(booktracker: BooktrackerModel)
+    fun update(booktracker: BooktrackerModel)
 }

@@ -1,18 +1,19 @@
 package org.wit.bookmark.console.main.main.controller
 
-import main.search
 import mu.KotlinLogging
-import org.wit.bookmark.console.main.models.BooktrackerMemStore
+import org.wit.bookmark.console.main.models.BooktrackerJSONStore
 import org.wit.bookmark.console.main.models.BooktrackerModel
 import org.wit.bookmark.console.main.views.BooktrackerView
+import org.wit.bookmark.console.main.models.BooktrackerMemStore
 
 class BooktrackerController {
-    val booktrackers = BooktrackerMemStore()
+    //val booktrackers = BooktrackerMemStore()
+    val booktrackers = BooktrackerJSONStore()
     val booktrackerView = BooktrackerView()
     val logger = KotlinLogging.logger {}
 
     init {
-        logger.info { "Launcing Booktracker Console App" }
+        logger.info { "Launching Booktracker Console App" }
         println("Booktracker Kotlin App Version 1.0")
     }
 
@@ -25,6 +26,7 @@ class BooktrackerController {
                 2 -> update()
                 3 -> list()
                 4 -> search()
+                -99 -> dummyData()
                 -1 -> println("Exiting App, Bye Bye!")
                 else -> println("Invalid Option")
             }
@@ -64,15 +66,21 @@ class BooktrackerController {
             } else
                 logger.info("Book Not Updated")
         }
+        else println("Book not Updated")
     }
 
     fun search() {
-        val aBook = main.search(booktrackerView.getId())!!
+        val aBook = search(booktrackerView.getId())!!
         booktrackerView.showBook(aBook)
     }
 
     fun search(id: Long): BooktrackerModel? {
         var foundBook = booktrackers.findOne(id)
         return foundBook
+    }
+    fun dummyData(){
+        booktrackers.create(BooktrackerModel(title ="Pride and Prejudice", author = "Jane Austen"))
+        booktrackers.create(BooktrackerModel(title ="Lord of the Rings", author = "J.R.R. Tolkien"))
+        booktrackers.create(BooktrackerModel(title ="It", author = "Stephen King"))
     }
 }

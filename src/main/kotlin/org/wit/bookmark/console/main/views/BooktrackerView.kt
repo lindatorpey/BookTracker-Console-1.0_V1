@@ -1,6 +1,7 @@
 package org.wit.bookmark.console.main.views
 
 
+import org.wit.bookmark.console.main.models.BooktrackerJSONStore
 import org.wit.bookmark.console.main.models.BooktrackerMemStore
 import org.wit.bookmark.console.main.models.BooktrackerModel
 
@@ -26,7 +27,7 @@ class BooktrackerView {
         return option
     }
 
-    fun listBooks(books : BooktrackerMemStore){
+    fun listBooks(books: BooktrackerJSONStore){
         println("List All Books")
         println()
         books.logAll()
@@ -35,7 +36,7 @@ class BooktrackerView {
 
     fun showBook(books : BooktrackerModel){
         if (books != null)
-            println("Book Details €books")
+            println("Book Details $books")
         else
             println("Book not Found...")
     }
