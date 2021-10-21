@@ -1,11 +1,15 @@
-package org.wit.booktracker.console.main
+package main
 
 import mu.KotlinLogging
+import org.wit.bookmark.console.main.models.BooktrackerMemStore
 import org.wit.bookmark.console.main.models.BooktrackerModel
+import org.wit.bookmark.console.main.views.BooktrackerView
+
 
 private val logger = KotlinLogging.logger{}
 
-val booktrackers = ArrayList<BooktrackerModel>()
+val booktrackers = BooktrackerMemStore()
+val booktrackerView = BooktrackerView()
 
 fun main(args: Array<String>){
     logger.info {"Launching Booktracker Console App"}
@@ -14,11 +18,11 @@ fun main(args: Array<String>){
     var input: Int
 
     do {
-        input = menu()
+        input = booktrackerView.menu()
         when(input){
             1 -> addBook()
             2 -> updateBook()
-            3 -> listBooks()
+            3 -> booktrackerView.listBooks(booktrackers)
             4 -> searchBooktracker()
             -1 -> println("Exiting App, Bye Bye!")
             else -> println("This is an invalid option")
@@ -52,55 +56,34 @@ fun menu() :Int{
 
 fun addBook(){
     var aBook = BooktrackerModel()
-    println("Add a Book")
-    println()
-    print("Enter a Book Title : ")
-    aBook.title = readLine()!!
-    println("Add an Author")
-    println()
-    print("Enter the Author's Name : ")
-    aBook.author = readLine()!!
-    if (aBook.title.isNotEmpty() && aBook.author.isNotEmpty()) {
-        aBook.id = booktrackers.size.toLong()
-        booktrackers.add(aBook.copy())
-        aBook.id++
-        logger.info("Book Added : [ $aBook ]")
-    }
+    if (booktrackerView.addBookData((aBook)))
+        booktrackers.create(aBook)
+
     else
         logger.info("Placemark Not Added")
 }
 
 fun updateBook() {
-    println("Update a book")
-    println()
-    listBooks()
-    var searchId = getId()
+    booktrackerView.listBooks(booktrackers)
+    var searchId = booktrackerView.getId()
     val aBook = search(searchId)
-    var tempTitle: String?
-    var tempAuth: String?
 
     if (aBook != null) {
-        print("Enter a new Title for $aBook.title : ")
-        tempTitle = readLine()!!
-        print("Enter a new Author for $aBook.author : ")
-        tempAuth = readLine()!!
-
-        if (!tempTitle.isNullOrEmpty() && !tempAuth.isNullOrEmpty()) {
-            aBook.title = tempTitle
-            aBook.author = tempAuth
-
-            println("You updated $aBook.title for Title and $aBook.author for Author")
+        if (booktrackerView.updateBookData(aBook)) {
+            booktrackers.update(aBook)
+            booktrackerView.showBook(aBook)
+            logger.info("Book updated :  $aBook")
         } else
-            logger.info("Details Not Updated")
+            logger.info("Book not Updated")
     } else
-        println("Details not updated..")
+        println("Book not Updated")
 }
 
-fun listBooks(){
+/*fun listBooks(){
     println("Here is a list of your books")
     println()
     booktrackers.forEach { logger.info("${it}") }
-}
+}*/
 fun getId(): Long{
     var strId : String?
     var searchId : Long
@@ -113,16 +96,12 @@ fun getId(): Long{
     return searchId
 }
 fun search(id: Long) : BooktrackerModel? {
-    var foundBook: BooktrackerModel? = booktrackers.find { b -> b.id == id }
+    var foundBook = booktrackers.findOne(id)
     return foundBook
 }
 
-fun searchBooktracker(){
-    var searchId = getId()
-    val aBook= search(searchId)
+fun searchBooktracker()  {
+    var aBook = search(booktrackerView.getId())!!
+    booktrackerView.showBook(aBook)
 
-    if(aBook != null)
-        println("Book Details $aBook")
-    else
-        println("Book not Found")
 }
