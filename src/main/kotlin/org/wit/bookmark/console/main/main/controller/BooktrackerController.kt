@@ -14,7 +14,7 @@ class BooktrackerController {
 
     init {
         logger.info { "Launching Booktracker Console App" }
-        println("Booktracker Kotlin App Version 1.0")
+        com.github.mm.coloredconsole.println{"Booktracker Kotlin App Version 1.0".bold.underline.white}
     }
 
     fun start(){
@@ -26,9 +26,10 @@ class BooktrackerController {
                 2 -> update()
                 3 -> list()
                 4 -> search()
+                5 -> delete()
                 -99 -> dummyData()
-                -1 -> println("Exiting App, Bye Bye!")
-                else -> println("Invalid Option")
+                -1 -> com.github.mm.coloredconsole.println{"Exiting App, Bye Bye!".white.bright}
+                else -> com.github.mm.coloredconsole.println{"Invalid Option".yellow.bright}
             }
             println()
         }while (input != -1)
@@ -78,9 +79,22 @@ class BooktrackerController {
         var foundBook = booktrackers.findOne(id)
         return foundBook
     }
+    fun delete() {
+        booktrackerView.listBooks(booktrackers)
+        var searchId = booktrackerView.getId()
+        val aBook = search(searchId)
+
+        if(aBook != null) {
+            booktrackers.delete(aBook)
+            com.github.mm.coloredconsole.println{"Book Deleted...".yellow.bright}
+            booktrackerView.listBooks(booktrackers)
+        }
+        else
+            com.github.mm.coloredconsole.println{"Book Not Deleted...".yellow.bright}
+    }
     fun dummyData(){
-        booktrackers.create(BooktrackerModel(title ="Pride and Prejudice", author = "Jane Austen"))
-        booktrackers.create(BooktrackerModel(title ="Lord of the Rings", author = "J.R.R. Tolkien"))
-        booktrackers.create(BooktrackerModel(title ="It", author = "Stephen King"))
+        booktrackers.create(BooktrackerModel(title ="Pride and Prejudice", author = "Jane Austen", isbn = 129456))
+        booktrackers.create(BooktrackerModel(title ="Lord of the Rings", author = "J.R.R. Tolkien",  isbn = 124156))
+        booktrackers.create(BooktrackerModel(title ="It", author = "Stephen King",  isbn = 124456))
     }
 }

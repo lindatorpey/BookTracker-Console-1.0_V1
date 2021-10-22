@@ -48,6 +48,10 @@ class BooktrackerJSONStore : BooktrackerStore{
         }
         serialize()
     }
+    fun delete(book: BooktrackerModel){
+        books.remove(book)
+        serialize()
+    }
     internal fun logAll(){
         books.forEach { logger.info ("${it}")}
     }

@@ -5,4 +5,5 @@ interface BooktrackerStore {
     fun findOne(id: Long): BooktrackerModel?
     fun create(booktracker: BooktrackerModel)
     fun update(booktracker: BooktrackerModel)
+    fun delete(booktracker: BooktrackerModel)
 }

@@ -34,6 +34,9 @@ class BooktrackerMemStore : BooktrackerStore {
             foundBook.author = book.author
         }
     }
+    fun delete(book: BooktrackerModel ) {
+        books.remove(book)
+    }
     internal fun logAll(){
         books.forEach { logger.info("${it}")}
     }
