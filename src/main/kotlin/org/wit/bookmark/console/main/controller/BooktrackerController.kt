@@ -1,10 +1,9 @@
-package org.wit.bookmark.console.main.main.controller
+package org.wit.bookmark.console.main.controller
 
 import mu.KotlinLogging
 import org.wit.bookmark.console.main.models.BooktrackerJSONStore
 import org.wit.bookmark.console.main.models.BooktrackerModel
 import org.wit.bookmark.console.main.views.BooktrackerView
-import org.wit.bookmark.console.main.models.BooktrackerMemStore
 
 class BooktrackerController {
     //val booktrackers = BooktrackerMemStore()
@@ -44,10 +43,14 @@ class BooktrackerController {
     fun add() {
         var aBook = BooktrackerModel()
 
-        if (booktrackerView.addBookData(aBook))
+        if (booktrackerView.addBookData(aBook)) {
             booktrackers.create(aBook)
-        else
-            logger.info("Book not Added")
+            com.github.mm.coloredconsole.println { "Book Added".yellow.bright }
+        }
+        else{
+            com.github.mm.coloredconsole.println{"Book Not Added".yellow.bright}
+            logger.info("Book not Added")}
+
     }
 
     fun list() {
@@ -63,16 +66,23 @@ class BooktrackerController {
             if (booktrackerView.updateBookData(aBook)) {
                 booktrackers.update(aBook)
                 booktrackerView.showBook(aBook)
+                com.github.mm.coloredconsole.println{"Book Updated...".yellow.bright}
                 logger.info("Book Updated : $aBook")
             } else
-                logger.info("Book Not Updated")
+            {
+                com.github.mm.coloredconsole.println{"Book Not Updated...".yellow.bright}
+                logger.info("Book Not Updated")}
         }
         else println("Book not Updated")
     }
 
     fun search() {
-        val aBook = search(booktrackerView.getId())!!
-        booktrackerView.showBook(aBook)
+        val aBook = search(booktrackerView.getId())
+        if (aBook != null) {
+            booktrackerView.showBook(aBook)
+        }
+        else
+            print("This id is not valid")
     }
 
     fun search(id: Long): BooktrackerModel? {
@@ -93,8 +103,9 @@ class BooktrackerController {
             com.github.mm.coloredconsole.println{"Book Not Deleted...".yellow.bright}
     }
     fun dummyData(){
-        booktrackers.create(BooktrackerModel(title ="Pride and Prejudice", author = "Jane Austen", isbn = 129456))
-        booktrackers.create(BooktrackerModel(title ="Lord of the Rings", author = "J.R.R. Tolkien",  isbn = 124156))
-        booktrackers.create(BooktrackerModel(title ="It", author = "Stephen King",  isbn = 124456))
+        booktrackers.create(BooktrackerModel(title ="Pride and Prejudice", author = "Jane Austen", isbn = 129456,comments = "Wonderful"))
+        booktrackers.create(BooktrackerModel(title ="Lord of the Rings", author = "J.R.R. Tolkien",  isbn = 124156, comments =  "My favourite book"))
+        booktrackers.create(BooktrackerModel(title ="The Secret", author = "Rhonda Byrne",  isbn = 124906, comments =  "Good book"))
+
     }
 }

@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken
 import mu.KotlinLogging
 
 import org.wit.bookmark.console.main.helpers.*
+import java.lang.Math.abs
 import java.util.*
 
 private val logger = KotlinLogging.logger{}
@@ -15,7 +16,7 @@ val gsonBuilder = GsonBuilder().setPrettyPrinting().create()
 val listType = object : TypeToken<java.util.ArrayList<BooktrackerModel>>() {}.type
 
 fun generateRandomId(): Long {
-    return Random().nextLong()
+    return abs(Random().nextLong())
 }
 class BooktrackerJSONStore : BooktrackerStore{
     var books = mutableListOf<BooktrackerModel>()
@@ -45,6 +46,8 @@ class BooktrackerJSONStore : BooktrackerStore{
         if (foundBook != null){
             foundBook.title = book.title
             foundBook.author = book.author
+            foundBook.isbn = book.isbn
+            foundBook.comments = book.comments
         }
         serialize()
     }

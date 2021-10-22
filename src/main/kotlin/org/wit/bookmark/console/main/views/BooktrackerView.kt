@@ -57,17 +57,20 @@ class BooktrackerView {
             books.author = readLine()!!
             com.github.mm.coloredconsole.print{"Enter an ISBN number : ".blue.bright}
             books.isbn = readLine()!!.toInt()
+            com.github.mm.coloredconsole.print{"Enter a Comment : ".blue.bright}
+            books.comments = readLine()!!
         }
         catch(e: NumberFormatException) { // Previously when input is empty is would out NumberFormat Exception, now it catches it and instead of breaking the console menu it outputs the below text to the console
             com.github.mm.coloredconsole.print{"Input must not be empty".yellow.bold.underline}
         }
 
-        return books.title.isNotEmpty() && books.author.isNotEmpty() && books.isbn.toString().isNotEmpty()
+        return books.title.isNotEmpty() && books.author.isNotEmpty() && books.isbn.toString().isNotEmpty() && books.comments.isNotEmpty()
     }
     fun updateBookData(books: BooktrackerModel) : Boolean{
         var tempTitle: String?
         var tempAuthor: String?
         var tempIsbn: Int
+        var tempComment: String?
 
         if(books != null){
             com.github.mm.coloredconsole.print{"Enter an new book title for ".blue.bright + books.title.blue.bright + " :"}
@@ -76,10 +79,13 @@ class BooktrackerView {
             tempAuthor = readLine()!!
             com.github.mm.coloredconsole.print{"Enter an new Isbn for ".blue.bright + books.isbn.blue.bright + " :"}
             tempIsbn = readLine()!!.toInt()
-            if (!tempTitle.isNullOrEmpty() && !tempAuthor.isNullOrEmpty() && !tempIsbn.toString().isNullOrEmpty()){
+            com.github.mm.coloredconsole.print{"Enter an new comment for ".blue.bright + books.comments.blue.bright + " :"}
+            tempComment = readLine()!!
+            if (!tempTitle.isNullOrEmpty() && !tempAuthor.isNullOrEmpty()  && !tempIsbn.toString().isNullOrEmpty() && !tempComment.isNullOrEmpty()){
                 books.title = tempTitle
                 books.author = tempAuthor
                 books.isbn = tempIsbn
+                books.comments = tempComment
                 return true
             }
         }

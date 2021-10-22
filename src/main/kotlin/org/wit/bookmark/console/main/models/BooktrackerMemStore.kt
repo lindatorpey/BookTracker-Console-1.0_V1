@@ -32,6 +32,8 @@ class BooktrackerMemStore : BooktrackerStore {
         if(foundBook != null){
             foundBook.title = book.title
             foundBook.author = book.author
+            foundBook.isbn = book.isbn
+            foundBook.comments = book.comments
         }
     }
     fun delete(book: BooktrackerModel ) {
